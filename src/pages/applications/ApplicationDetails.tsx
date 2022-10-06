@@ -1,9 +1,9 @@
-import React from 'react'
+import { useParams } from 'react-router-dom';
 
 const ApplicationDetails: React.FC = () => {
-  return (
-    <div>ApplicationDetails</div>
-  )
-}
+  const { applicationId } = useParams();
 
-export default ApplicationDetails
+  return <div>{applicationId}</div>;
+};
+
+export default ApplicationDetails;

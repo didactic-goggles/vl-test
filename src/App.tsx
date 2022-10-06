@@ -4,6 +4,7 @@ import { useAppDispatch } from 'app/hooks';
 import routes from 'router';
 import { fetchUser } from 'reducers/auth/authSlice';
 import Header from 'layout/header';
+import "./App.scss"
 
 function App() {
   const routesElement = useRoutes(routes);

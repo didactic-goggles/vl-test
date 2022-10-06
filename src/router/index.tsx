@@ -33,7 +33,15 @@ const routes: RouteObject[] = [
     element: <RequireAuth children={<Applications />} />
   },
   {
-    path: '/application/new',
+    path: '/application/create',
+    element: (
+      <RequireAuth>
+        <ApplicationForm />
+      </RequireAuth>
+    )
+  },
+  {
+    path: '/application/update/:applicationId',
     element: (
       <RequireAuth>
         <ApplicationForm />

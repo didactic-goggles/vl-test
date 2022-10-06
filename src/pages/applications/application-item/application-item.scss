@@ -1,0 +1,48 @@
+.application-item {
+    position: relative;
+    border-radius: 8px;
+    // padding: 0.5rem;
+    background-color: #fff;
+    min-height: 100px;
+
+    // &:not(:last-of-type) {
+    //     margin-bottom: 1rem;
+    // }
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+    .application-item-body {
+        padding: 0.5rem 4rem 0.5rem 0.5rem;
+    }
+
+    .dropdown {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        z-index: 2;
+
+        &.show {
+            z-index: 3;
+        }
+
+        .dropdown-toggle {
+            &.no-caret {
+                &::after {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .application-item-link {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1;
+        content: "";
+    }
+}
