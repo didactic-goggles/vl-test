@@ -61,7 +61,7 @@ const Header: React.FC = () => {
                 height="32"
                 className="rounded-circle me-2"
               />
-              <span>{user.name}</span>
+              <span>{user.username}</span>
             </Dropdown.Toggle>
 
             <Dropdown.Menu>

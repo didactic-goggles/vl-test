@@ -32,7 +32,7 @@ const ApplicationDeleteModal: React.FC<IProps> = (props) => {
     >
       <Modal.Body className="p-4 text-center">
         <h5>
-          Delete application <strong>{activeApplication.title}</strong>?
+          Delete application <strong>{activeApplication.name}</strong>?
         </h5>
         <p className="mb-0">This action cannot be undone</p>
       </Modal.Body>

@@ -1,6 +1,7 @@
 import { RouteObject, Navigate, useLocation } from 'react-router-dom';
 import { useAppSelector } from 'app/hooks';
 import { selectAuth } from 'reducers/auth/authSlice';
+import Loading from 'components/loading';
 
 // Auth Pages
 import Login from 'pages/auth/Login';
@@ -18,7 +19,7 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   const location = useLocation();
 
   if (auth.status === 'fetching') {
-    return <div>fetching</div>;
+    return <Loading text='Fetching auth data' />;
   }
   if (!auth.user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
@@ -30,7 +31,11 @@ function RequireAuth({ children }: { children: JSX.Element }) {
 const routes: RouteObject[] = [
   {
     path: '/',
-    element: <RequireAuth children={<Applications />} />
+    element: (
+      <RequireAuth>
+        <Applications />
+      </RequireAuth>
+    )
   },
   {
     path: '/application/create',

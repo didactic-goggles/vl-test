@@ -1,12 +1,15 @@
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Form } from 'react-final-form';
+// import { useCookies } from 'react-cookie'
 import { useAppDispatch } from 'app/hooks';
 import { login } from 'reducers/auth/authSlice';
 import { UserLoginPayload } from 'models/auth.model';
 import FormField from 'components/form-field';
 import FetchButton from 'components/fetch-button';
+import { toast } from 'react-toastify';
 
 const LoginForm: React.FC = () => {
+  // const [_, setCookie] = useCookies(['sessionId'])
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -14,10 +17,11 @@ const LoginForm: React.FC = () => {
 
   const handleLoginFormSubmit = async (formData: UserLoginPayload) => {
     try {
-      await dispatch(login(formData));
+      await dispatch(login(formData)).unwrap();
+      // setCookie('sessionId', response.session, { sameSite: 'none', secure: true})
       navigate(from, { replace: true });
-    } catch (error) {
-      // error
+    } catch (error: any) {
+      toast.error(error.message)
     }
   };
   return (
@@ -27,10 +31,14 @@ const LoginForm: React.FC = () => {
           <Form
             onSubmit={handleLoginFormSubmit}
             render={({ handleSubmit, submitting }) => (
-              <form className="max-w-450 min-w-sm-330 min-w-unset" onSubmit={handleSubmit}>
+              <form
+                className="max-w-450 min-w-sm-330 min-w-unset"
+                onSubmit={handleSubmit}
+              >
                 <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
                 <div className="mb-3">
                   <FormField
+                    rules={['required']}
                     name="username"
                     label="Username"
                     placeholder="Email"
@@ -39,6 +47,7 @@ const LoginForm: React.FC = () => {
                 </div>
                 <div className="mb-3">
                   <FormField
+                    rules={['required']}
                     name="password"
                     label="Password"
                     placeholder="Password"
@@ -56,9 +65,7 @@ const LoginForm: React.FC = () => {
             )}
           />
           <div className="text-center mt-3">
-            <Link to="/register">
-              Register
-            </Link>
+            <Link to="/register">Register</Link>
           </div>
         </div>
       </div>

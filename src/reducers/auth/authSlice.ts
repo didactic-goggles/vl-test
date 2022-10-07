@@ -1,6 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
 import { RootState } from 'app/store';
-import { User, UserLoginPayload, UserRegisterPayload } from 'models/auth.model';
+import {
+  User,
+  UserLoginError,
+  UserLoginPayload,
+  UserLoginResponse,
+  UserRegisterPayload
+} from 'models/auth.model';
 import { loginReq, registerReq, fetchUserReq } from './authAPI';
 
 export interface UserState {
@@ -17,17 +24,33 @@ const initialState: UserState = {
 
 export const login = createAsyncThunk(
   'auth/loginReq',
-  async (formData: UserLoginPayload) => {
-    const response = await loginReq(formData);
-    return response.data;
+  async (formData: UserLoginPayload, { rejectWithValue }) => {
+    try {
+      const response = await loginReq(formData);
+      return response.data as UserLoginResponse;
+    } catch (err) {
+      const error = err as AxiosError<UserLoginError>;
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
 export const register = createAsyncThunk(
   'auth/registerReq',
-  async (formData: UserRegisterPayload) => {
-    const response = await registerReq(formData);
-    return response.data;
+  async (formData: UserRegisterPayload, { rejectWithValue }) => {
+    try {
+      const response = await registerReq(formData);
+      return response.data;
+    } catch (err) {
+      const error = err as AxiosError<UserLoginError>;
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
@@ -52,10 +75,8 @@ export const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.user = { ...action.payload };
-        state.token = action.payload.token;
-        if (localStorage) {
-          localStorage.setItem('token', action.payload.token);
+        state.user = {
+          username: action.payload.username
         }
       })
       .addCase(login.rejected, (state) => {
@@ -80,10 +101,8 @@ export const authSlice = createSlice({
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-        if (localStorage) {
-          localStorage.setItem('token', action.payload.token);
+        state.user = {
+          username: action.payload.username
         }
       })
       .addCase(fetchUser.rejected, (state) => {

@@ -12,7 +12,7 @@ import ErrorContainer from 'components/error-container';
 
 const Applications: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const {applications, status} = useAppSelector(selectApplications);
+  const { applications, status } = useAppSelector(selectApplications);
   let filteredApplications = applications;
   const dispatch = useAppDispatch();
 
@@ -25,7 +25,7 @@ const Applications: React.FC = () => {
 
   if (searchTerm !== '') {
     filteredApplications = applications.filter((application) => {
-      return application.title.toLowerCase().includes(searchTerm.toLowerCase());
+      return application.name.toLowerCase().includes(searchTerm.toLowerCase());
     });
   }
 
@@ -47,20 +47,9 @@ const Applications: React.FC = () => {
     return <Loading text="Fetching Applications" />;
   }
 
-  if (status === 'fetched') {
-    if (applications.length === 0) {
-      return (
-        <ErrorContainer errorText={`There are no results for ${searchTerm}`} />
-      );
-    }
-  
-    if (filteredApplications.length === 0) {
-      return (
-        <ErrorContainer errorText={`There are no results for ${searchTerm}`} />
-      );
-    }
+  if (status === 'failed' || applications.length === 0) {
+    return <ErrorContainer errorText={`There are no applications`} />;
   }
-
 
   return (
     <>
@@ -85,14 +74,18 @@ const Applications: React.FC = () => {
         </div>
       </div>
       <hr />
-      <div className="applications-container">
-        {filteredApplications.map((applicationData) => (
-          <ApplicationItem
-            key={applicationData.id}
-            application={applicationData}
-          />
-        ))}
-      </div>
+      {applications.length > 0 && filteredApplications.length === 0 ? (
+        <ErrorContainer errorText={`There are no results for ${searchTerm}`} />
+      ) : (
+        <div className="applications-container">
+          {filteredApplications.map((applicationData) => (
+            <ApplicationItem
+              key={applicationData.id}
+              application={applicationData}
+            />
+          ))}
+        </div>
+      )}
     </>
   );
 };

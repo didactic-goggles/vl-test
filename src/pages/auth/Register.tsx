@@ -5,14 +5,19 @@ import { register } from 'reducers/auth/authSlice';
 import { UserRegisterPayload } from 'models/auth.model';
 import FormField from 'components/form-field';
 import FetchButton from 'components/fetch-button';
+import { toast } from 'react-toastify';
 
 const RegisterForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const handleRegisterFormSubmit = async (formData: UserRegisterPayload) => {
-    await dispatch(register(formData));
-    navigate('/');
+    try {
+      await dispatch(register(formData)).unwrap();
+      navigate('/');
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
   return (
     <div className="container h-100 d-flex">
@@ -21,18 +26,23 @@ const RegisterForm: React.FC = () => {
           <Form
             onSubmit={handleRegisterFormSubmit}
             render={({ handleSubmit, submitting }) => (
-              <form className="max-w-450 min-w-sm-330 min-w-unset" onSubmit={handleSubmit}>
+              <form
+                className="max-w-450 min-w-sm-330 min-w-unset"
+                onSubmit={handleSubmit}
+              >
                 <h1 className="h3 mb-3 fw-normal">Register</h1>
                 <div className="mb-3">
                   <FormField
-                    name="firstname"
-                    label="First Name"
-                    placeholder="First Name"
+                    rules={['required']}
+                    name="username"
+                    label="Username"
+                    placeholder="Username"
                     type="text"
                   />
                 </div>
-                <div className="mb-3">
+                {/* <div className="mb-3">
                   <FormField
+                    rules={['required']}
                     name="lastname"
                     label="Last Name"
                     placeholder="Last Name"
@@ -41,25 +51,19 @@ const RegisterForm: React.FC = () => {
                 </div>
                 <div className="mb-3">
                   <FormField
+                    rules={['required', 'email']}
                     name="email"
                     label="Email"
                     placeholder="Email"
                     type="email"
                   />
-                </div>
+                </div> */}
                 <div className="mb-3">
                   <FormField
+                    rules={['required']}
                     name="password"
                     label="Password"
                     placeholder="Password"
-                    type="password"
-                  />
-                </div>
-                <div className="mb-3">
-                  <FormField
-                    name="confirmPassword"
-                    label="Confirm Password"
-                    placeholder="Confirm Password"
                     type="password"
                   />
                 </div>
@@ -83,68 +87,3 @@ const RegisterForm: React.FC = () => {
 };
 
 export default RegisterForm;
-
-// import { useNavigate, Link } from 'react-router-dom';
-// import { Form, Field } from 'react-final-form';
-// import { useAppDispatch } from 'app/hooks';
-// import { register } from 'reducers/auth/authSlice';
-// import { UserRegisterPayload } from 'models/auth.model';
-
-// const Signup: React.FC = () => {
-//   const navigate = useNavigate();
-//   const dispatch = useAppDispatch();
-//   const handleRegisterFormSubmit = async (formData: UserRegisterPayload) => {
-//     await dispatch(register(formData));
-//     navigate('/');
-//   };
-//   return (
-//     <>
-//       <Link to="/login">Login</Link>
-
-//       <Form
-//         onSubmit={handleRegisterFormSubmit}
-//         render={({ handleSubmit, submitting }) => (
-//           <form onSubmit={handleSubmit}>
-//             <div>
-//               <label>First Name</label>
-//               <Field<string>
-//                 name="firstname"
-//                 component="input"
-//                 placeholder="First Name"
-//               />
-//             </div>
-//             <div>
-//               <label>Last Name</label>
-//               <Field<string>
-//                 name="lastname"
-//                 component="input"
-//                 placeholder="Last Name"
-//               />
-//             </div>
-//             <div>
-//               <label>Password</label>
-//               <Field<string>
-//                 name="password"
-//                 component="input"
-//                 placeholder="Password"
-//               />
-//             </div>
-//             <div>
-//               <label>Password Confirm</label>
-//               <Field<string>
-//                 name="password_confirm"
-//                 component="input"
-//                 placeholder="Password Confirm"
-//               />
-//             </div>
-//             <button type="submit" disabled={submitting}>
-//               Submit
-//             </button>
-//           </form>
-//         )}
-//       />
-//     </>
-//   );
-// };
-
-// export default Signup;

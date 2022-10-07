@@ -1,6 +1,5 @@
 export interface User {
-  name: string;
-  email: string;
+  username: string;
 }
 
 export interface UserLoginPayload {
@@ -8,17 +7,19 @@ export interface UserLoginPayload {
   password: string;
 }
 
-export interface UserRegisterPayload {
-  firstname: string;
-  lastname: string;
-  email: string;
-  password: string;
+export interface UserLoginResponse {
+  username: string;
+  session: string;
 }
 
-export interface UserLoginResponse {
-  user: {
-    name: string;
-    email: string;
-  };
-  token: string;
+export interface UserLoginError {
+  message: string;
+}
+
+export interface UserRegisterPayload {
+  username: string;
+  // firstname: string;
+  // lastname: string;
+  // email: string;
+  password: string;
 }

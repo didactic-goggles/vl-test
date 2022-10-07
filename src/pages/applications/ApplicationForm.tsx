@@ -1,40 +1,57 @@
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import {
-  Application,
-  ApplicationCreatePayload
-} from 'models/application.model';
+import { Application } from 'models/application.model';
 import { Form } from 'react-final-form';
 import {
   createApplication,
+  getApplication,
   selectApplications,
   setActiveApplication,
   updateApplication
 } from 'reducers/application/applicationSlice';
 import FetchButton from 'components/fetch-button';
 import FormField from 'components/form-field';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
+import Loading from 'components/loading';
 
 const ApplicationForm: React.FC = () => {
   const navigate = useNavigate();
-  const { activeApplication } = useAppSelector(selectApplications);
+  const { applicationId } = useParams();
+  const { activeApplication, status } = useAppSelector(selectApplications);
   const dispatch = useAppDispatch();
-  const mode = activeApplication ? 'update' : 'create';
+  const [showSecret, setShowSecret] = useState(false);
+  const mode = applicationId ? 'update' : 'create';
 
-  const handleFormSubmit = async (
-    formData: Application | ApplicationCreatePayload
-  ) => {
+  const handleFormSubmit = async (formData: Application) => {
     try {
       if (mode === 'create') {
-        await dispatch(createApplication(formData as ApplicationCreatePayload));
+        await dispatch(createApplication(formData)).unwrap();
       } else {
-        await dispatch(updateApplication(formData as Application));
+        await dispatch(updateApplication(formData)).unwrap();
         dispatch(setActiveApplication(null));
       }
       navigate('/');
-    } catch (error) {
-      // error
+    } catch (error: any) {
+      toast.error(error.details);
     }
   };
+
+  useEffect(() => {
+    if (mode === 'create') {
+      dispatch(setActiveApplication(null));
+    }
+  }, [mode, dispatch]);
+
+  useEffect(() => {
+    if (applicationId && !activeApplication) {
+      dispatch(getApplication(applicationId));
+    }
+  }, [applicationId, activeApplication, dispatch]);
+
+  if (status === 'loading' && !activeApplication) {
+    return <Loading text="Loading application details" />;
+  }
 
   return (
     <div className="d-flex justify-content-center mt-2 mt-md-5">
@@ -51,9 +68,57 @@ const ApplicationForm: React.FC = () => {
               >
                 <div className="mb-3">
                   <FormField
-                    name="title"
-                    label="Title"
-                    placeholder="Title"
+                    rules={['required']}
+                    name="id"
+                    label="ID"
+                    placeholder="ID"
+                    type="text"
+                  />
+                </div>
+                <div className="mb-3">
+                  <FormField
+                    rules={['required']}
+                    name="name"
+                    label="Name"
+                    placeholder="Name"
+                    type="text"
+                  />
+                </div>
+                <div className="mb-3 position-relative">
+                  <FormField
+                    rules={['required']}
+                    name="secret"
+                    label="Secret"
+                    placeholder="Secret"
+                    type={showSecret ? 'text' : 'password'}
+                  />
+                  <button
+                    className="btn password-toggler"
+                    type="button"
+                    onClick={() => setShowSecret(!showSecret)}
+                  >
+                    <i
+                      className={`bi bi-eye-${
+                        showSecret ? 'slash-fill' : 'fill'
+                      }`}
+                    ></i>
+                  </button>
+                </div>
+                <div className="mb-3">
+                  <FormField
+                    rules={['required']}
+                    name="lang"
+                    label="Lang"
+                    placeholder="Lang"
+                    type="text"
+                  />
+                </div>
+                <div className="mb-3">
+                  <FormField
+                    rules={['required']}
+                    name="version"
+                    label="Version"
+                    placeholder="Version"
                     type="text"
                   />
                 </div>

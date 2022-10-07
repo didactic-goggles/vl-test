@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { useRoutes, Outlet } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import { useAppDispatch } from 'app/hooks';
 import routes from 'router';
 import { fetchUser } from 'reducers/auth/authSlice';
-import Header from 'layout/header';
+import Header from 'layout/Header';
 import './App.scss';
+import Footer from 'layout/Footer';
 
 function App() {
   const routesElement = useRoutes(routes);
@@ -21,7 +23,9 @@ function App() {
       <main className="container">
         {routesElement}
         <Outlet />
+        <ToastContainer theme='colored' position='top-right' hideProgressBar={true} />
       </main>
+      <Footer />
     </>
   );
 }

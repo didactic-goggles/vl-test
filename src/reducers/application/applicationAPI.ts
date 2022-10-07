@@ -1,22 +1,25 @@
 import axios from 'axios';
 import {
-  Application,
-  ApplicationCreatePayload
+  Application
 } from 'models/application.model';
 
 export function fetchAllReq() {
-  return axios.get('/products');
+  return axios.get('/applications');
 }
 
-export function createApplicationReq(formData: ApplicationCreatePayload) {
-  return axios.post('/products/add', formData);
+export function getApplicationReq(applicationId: string) {
+  return axios.get(`/applications/${applicationId}`);
+}
+
+export function createApplicationReq(formData: Application) {
+  return axios.post('/applications', formData);
 }
 
 export function updateApplicationReq(formData: Application) {
-  const { id, ...body } = formData;
-  return axios.put(`/products/${id}`, body);
+  // const { id, ...body } = formData;
+  return axios.put(`/applications/${formData.id}`, formData);
 }
 
-export function deleteApplicationReq(applicationId: string | number) {
-  return axios.delete(`/products/${applicationId}`);
+export function deleteApplicationReq(applicationId: string) {
+  return axios.delete(`/applications/${applicationId}`);
 }

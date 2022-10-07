@@ -1,8 +1,12 @@
 export interface Application {
-  id: number;
-  title: string;
+  id: string;
+  name: string;
+  secret: string;
+  lang: string;
+  version: string;
 }
 
-export interface ApplicationCreatePayload {
-  title: string;
+export interface ApplicationError {
+  details: string;
+  status: string;
 }

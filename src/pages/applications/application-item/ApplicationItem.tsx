@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import { Application } from 'models/application.model';
 import { setActiveApplication } from 'reducers/application/applicationSlice';
@@ -30,7 +30,9 @@ const ApplicationItem: React.FC<IProps> = (props) => {
   return (
     <>
       <div className="application-item">
-        <div className="application-item-body">{application.title}</div>
+        <div className="application-item-body">
+          <h4>{application.name}</h4>
+        </div>
         <Dropdown>
           <Dropdown.Toggle
             variant="light"
@@ -51,10 +53,10 @@ const ApplicationItem: React.FC<IProps> = (props) => {
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Link
+        {/* <Link
           className="application-item-link"
           to={`/application/${application.id}`}
-        ></Link>
+        ></Link> */}
       </div>
       <ApplicationDeleteModal
         show={showDeleteModal}
