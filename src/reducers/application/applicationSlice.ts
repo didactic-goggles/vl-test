@@ -7,13 +7,14 @@ import {
 import {
   fetchAllReq,
   createApplicationReq,
-  updateApplicationReq
+  updateApplicationReq,
+  deleteApplicationReq
 } from './applicationAPI';
 
 export interface UserState {
   applications: Application[];
   activeApplication: null | Application;
-  status: 'idle' | 'loading' | 'failed' | 'fetched';
+  status: 'idle' | 'loading' | 'failed' | 'fetched' | 'deleting';
 }
 
 const initialState: UserState = {
@@ -46,6 +47,14 @@ export const updateApplication = createAsyncThunk(
   }
 );
 
+export const deleteApplication = createAsyncThunk(
+  'application/deleteReq',
+  async (applicationId: string | number) => {
+    await deleteApplicationReq(applicationId);
+    return applicationId;
+  }
+);
+
 export const applicationSlice = createSlice({
   name: 'application',
   initialState,
@@ -69,18 +78,12 @@ export const applicationSlice = createSlice({
       .addCase(getAllApplications.rejected, (state) => {
         state.status = 'failed';
       })
-      .addCase(createApplication.pending, (state) => {
-        state.status = 'loading';
-      })
       .addCase(createApplication.fulfilled, (state, action) => {
         state.status = 'fetched';
         state.applications.push(action.payload);
       })
       .addCase(createApplication.rejected, (state) => {
         state.status = 'failed';
-      })
-      .addCase(updateApplication.pending, (state) => {
-        // state.status = 'loading';
       })
       .addCase(updateApplication.fulfilled, (state, action) => {
         state.status = 'fetched';
@@ -93,6 +96,21 @@ export const applicationSlice = createSlice({
       })
       .addCase(updateApplication.rejected, (state) => {
         state.status = 'failed';
+      })
+      .addCase(deleteApplication.pending, (state) => {
+        state.status = 'deleting';
+      })
+      .addCase(deleteApplication.fulfilled, (state, action) => {
+        state.status = 'fetched';
+        const updatedApplicationIndex = state.applications.findIndex(
+          (a) => a.id.toString() === action.payload.toString()
+        );
+        if (updatedApplicationIndex !== -1) {
+          state.applications.splice(
+            updatedApplicationIndex,
+            1
+          );
+        }
       });
   }
 });

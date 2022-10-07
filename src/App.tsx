@@ -4,7 +4,7 @@ import { useAppDispatch } from 'app/hooks';
 import routes from 'router';
 import { fetchUser } from 'reducers/auth/authSlice';
 import Header from 'layout/header';
-import "./App.scss"
+import './App.scss';
 
 function App() {
   const routesElement = useRoutes(routes);
@@ -18,7 +18,7 @@ function App() {
   return (
     <>
       <Header />
-      <main>
+      <main className="container">
         {routesElement}
         <Outlet />
       </main>

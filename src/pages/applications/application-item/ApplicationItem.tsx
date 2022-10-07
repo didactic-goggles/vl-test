@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import { Application } from 'models/application.model';
 import { setActiveApplication } from 'reducers/application/applicationSlice';
 import { useAppDispatch } from 'app/hooks';
 import './application-item.scss';
+import ApplicationDeleteModal from './ApplicationDeleteModal';
 
 interface IProps {
   application: Application;
@@ -13,10 +15,16 @@ const ApplicationItem: React.FC<IProps> = (props) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { application } = props;
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleUpdateButtonClick = () => {
     dispatch(setActiveApplication(application));
-    navigate(`/application/update/${application.id}`)
+    navigate(`/application/update/${application.id}`);
+  };
+
+  const handleDeleteButtonClick = () => {
+    dispatch(setActiveApplication(application));
+    setShowDeleteModal(true);
   };
 
   return (
@@ -37,7 +45,7 @@ const ApplicationItem: React.FC<IProps> = (props) => {
               <i className="bi bi-pencil-square text-success me-2"></i>
               <span>Update</span>
             </Dropdown.Item>
-            <Dropdown.Item>
+            <Dropdown.Item onClick={handleDeleteButtonClick}>
               <i className="bi bi-trash text-danger me-2"></i>
               <span>Delete</span>
             </Dropdown.Item>
@@ -48,6 +56,10 @@ const ApplicationItem: React.FC<IProps> = (props) => {
           to={`/application/${application.id}`}
         ></Link>
       </div>
+      <ApplicationDeleteModal
+        show={showDeleteModal}
+        handleClose={() => setShowDeleteModal(false)}
+      />
     </>
   );
 };

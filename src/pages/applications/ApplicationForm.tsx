@@ -15,10 +15,10 @@ import FormField from 'components/form-field';
 import { useNavigate } from 'react-router-dom';
 
 const ApplicationForm: React.FC = () => {
-  const navigate = useNavigate()
-  const applications = useAppSelector(selectApplications);
+  const navigate = useNavigate();
+  const { activeApplication } = useAppSelector(selectApplications);
   const dispatch = useAppDispatch();
-  const mode = applications.activeApplication ? 'update' : 'create';
+  const mode = activeApplication ? 'update' : 'create';
 
   const handleFormSubmit = async (
     formData: Application | ApplicationCreatePayload
@@ -28,36 +28,47 @@ const ApplicationForm: React.FC = () => {
         await dispatch(createApplication(formData as ApplicationCreatePayload));
       } else {
         await dispatch(updateApplication(formData as Application));
-        dispatch(setActiveApplication(null))
+        dispatch(setActiveApplication(null));
       }
-      navigate('/')
+      navigate('/');
     } catch (error) {
       // error
     }
   };
 
   return (
-    <div className="container">
-      <h1>{mode === 'create' ? 'Create' : 'Update'} Application</h1>
-      <Form
-        initialValues={applications.activeApplication}
-        onSubmit={handleFormSubmit}
-        render={({ handleSubmit, submitting }) => (
-          <form className="" onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <FormField
-                name="title"
-                label="Title"
-                placeholder="Title"
-                type="text"
-              />
-            </div>
-            <FetchButton type="submit" loading={submitting} className="w-100">
-              {mode === 'create' ? 'Create' : 'Update'}
-            </FetchButton>
-          </form>
-        )}
-      />
+    <div className="d-flex justify-content-center mt-2 mt-md-5">
+      <div className="card shadow border-0">
+        <div className="card-body p-5">
+          <h1>{mode === 'create' ? 'Create' : 'Update'} Application</h1>
+          <Form
+            initialValues={activeApplication}
+            onSubmit={handleFormSubmit}
+            render={({ handleSubmit, submitting }) => (
+              <form
+                className="max-w-450 min-w-sm-330 min-w-unset"
+                onSubmit={handleSubmit}
+              >
+                <div className="mb-3">
+                  <FormField
+                    name="title"
+                    label="Title"
+                    placeholder="Title"
+                    type="text"
+                  />
+                </div>
+                <FetchButton
+                  type="submit"
+                  loading={submitting}
+                  className="w-100"
+                >
+                  {mode === 'create' ? 'Create' : 'Update'}
+                </FetchButton>
+              </form>
+            )}
+          />
+        </div>
+      </div>
     </div>
   );
 };

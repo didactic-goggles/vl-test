@@ -16,3 +16,7 @@ export function updateApplicationReq(formData: Application) {
   const { id, ...body } = formData;
   return axios.put(`/products/${id}`, body);
 }
+
+export function deleteApplicationReq(applicationId: string | number) {
+  return axios.delete(`/products/${applicationId}`);
+}

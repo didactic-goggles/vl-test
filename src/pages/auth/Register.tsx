@@ -4,7 +4,6 @@ import { useAppDispatch } from 'app/hooks';
 import { register } from 'reducers/auth/authSlice';
 import { UserRegisterPayload } from 'models/auth.model';
 import FormField from 'components/form-field';
-import './form.scss';
 import FetchButton from 'components/fetch-button';
 
 const RegisterForm: React.FC = () => {
@@ -22,7 +21,7 @@ const RegisterForm: React.FC = () => {
           <Form
             onSubmit={handleRegisterFormSubmit}
             render={({ handleSubmit, submitting }) => (
-              <form className="form-auth w-100" onSubmit={handleSubmit}>
+              <form className="max-w-450 min-w-sm-330 min-w-unset" onSubmit={handleSubmit}>
                 <h1 className="h3 mb-3 fw-normal">Register</h1>
                 <div className="mb-3">
                   <FormField

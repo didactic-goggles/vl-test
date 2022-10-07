@@ -4,13 +4,13 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { logout, selectAuth } from 'reducers/auth/authSlice';
 
 const Header: React.FC = () => {
-  const auth = useAppSelector(selectAuth);
+  const { user } = useAppSelector(selectAuth);
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(logout());
   };
 
-  if (!auth.user) return null;
+  if (!user) return null;
 
   return (
     <header className="px-3 py-2 mb-3 border-bottom">
@@ -48,9 +48,9 @@ const Header: React.FC = () => {
             </li>
           </ul>
 
-          <Dropdown>
+          <Dropdown align="end">
             <Dropdown.Toggle
-              variant="link"
+              variant="light"
               className="d-block link-dark text-decoration-none dropdown-toggle"
               id="dropdown-user"
             >
@@ -59,8 +59,9 @@ const Header: React.FC = () => {
                 alt="mdo"
                 width="32"
                 height="32"
-                className="rounded-circle"
+                className="rounded-circle me-2"
               />
+              <span>{user.name}</span>
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
@@ -68,7 +69,7 @@ const Header: React.FC = () => {
               <Dropdown.Divider />
               <Dropdown.Item onClick={handleLogout}>
                 <i className="bi bi-box-arrow-left text-danger me-2"></i>
-                <span className='fw-semibold'>Logout</span>
+                <span className="fw-semibold">Logout</span>
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

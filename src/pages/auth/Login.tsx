@@ -4,7 +4,6 @@ import { useAppDispatch } from 'app/hooks';
 import { login } from 'reducers/auth/authSlice';
 import { UserLoginPayload } from 'models/auth.model';
 import FormField from 'components/form-field';
-import './form.scss';
 import FetchButton from 'components/fetch-button';
 
 const LoginForm: React.FC = () => {
@@ -17,7 +16,6 @@ const LoginForm: React.FC = () => {
     try {
       await dispatch(login(formData));
       navigate(from, { replace: true });
-      // navigate(from, { replace: true });
     } catch (error) {
       // error
     }
@@ -29,7 +27,7 @@ const LoginForm: React.FC = () => {
           <Form
             onSubmit={handleLoginFormSubmit}
             render={({ handleSubmit, submitting }) => (
-              <form className="form-auth w-100" onSubmit={handleSubmit}>
+              <form className="max-w-450 min-w-sm-330 min-w-unset" onSubmit={handleSubmit}>
                 <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
                 <div className="mb-3">
                   <FormField

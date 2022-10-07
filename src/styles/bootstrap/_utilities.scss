@@ -1,0 +1,21 @@
+
+$utilities: (
+    "min-width": (
+      property: min-width,
+      responsive: true,
+      class: min-w,
+      values: (
+        330: 330px,
+        unset: unset
+      )
+    ),
+    "max-width": (
+      property: max-width,
+      responsive: true,
+      class: max-w,
+      values: (
+        450: 450px,
+        unset: unset
+      )
+    )
+  );
