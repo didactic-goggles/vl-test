@@ -9,7 +9,7 @@ import Register from 'pages/auth/Register';
 
 // Applications
 import Applications from 'pages/applications/Applications';
-import ApplicationDetails from 'pages/applications/ApplicationDetails';
+// import ApplicationDetails from 'pages/applications/ApplicationDetails';
 import ApplicationForm from 'pages/applications/ApplicationForm';
 
 import NoMatch from 'pages/NoMatch';
@@ -38,12 +38,20 @@ const routes: RouteObject[] = [
     )
   },
   {
+    path: '/application',
+    element: <Navigate to="/" />
+  },
+  {
     path: '/application/create',
     element: (
       <RequireAuth>
         <ApplicationForm />
       </RequireAuth>
     )
+  },
+  {
+    path: '/application/update',
+    element: <Navigate to="/" />
   },
   {
     path: '/application/update/:applicationId',
@@ -53,14 +61,14 @@ const routes: RouteObject[] = [
       </RequireAuth>
     )
   },
-  {
-    path: '/application/:applicationId',
-    element: (
-      <RequireAuth>
-        <ApplicationDetails />
-      </RequireAuth>
-    )
-  },
+  // {
+  //   path: '/application/:applicationId',
+  //   element: (
+  //     <RequireAuth>
+  //       <ApplicationDetails />
+  //     </RequireAuth>
+  //   )
+  // },
   {
     path: 'login',
     element: <Login />

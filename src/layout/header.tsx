@@ -65,7 +65,7 @@ const Header: React.FC = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item>Action</Dropdown.Item>
+              <Dropdown.Item>Menu Item</Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item onClick={handleLogout}>
                 <i className="bi bi-box-arrow-left text-danger me-2"></i>
