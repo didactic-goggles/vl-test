@@ -13,7 +13,7 @@ const Header: React.FC = () => {
   if (!user) return null;
 
   return (
-    <header className="px-3 py-2 mb-3 border-bottom">
+    <header className="px-3 py-2 mb-3 border-bottom sticky-top bg-white">
       <div className="container">
         <div className="d-flex flex-wrap align-items-center justify-content-start">
           <Link
